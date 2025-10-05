@@ -8,13 +8,21 @@
 </head>
 <body>
     <div class="search">
-        <h1>Stucked In Your Thoughts</h1>
-        <p>Not a big problem — our AI will find a solution for you and get instant results.</p>
-        <div class=' search-input-wrapper' >
-            <input type="text" name="" id="" class="search-input">
-            <span class="search-btn" >&#8594;</span>
+        <div class="intro-section" id="intro-section">
+            <h1>Stucked In Your Thoughts</h1>
+            <p>Not a big problem — our AI will find a solution for you and get instant results.</p>
         </div>
-        <div class="topics-container"></div>
+
+        <div id="prompt-container" class="prompt-container"></div>
+
+        <div class=' search-input-wrapper fixed-input' id="input-wrapper" >
+            <input type="text" name="" id="search-input" class="search-input">
+            <span class="search-btn" id="search-btn" >&#8594;</span>
+        </div>
+
+        <div class="topics-container" id="topics-container"></div>
+        
+        
     </div>
     <script src="script.js"></script>
 </body>

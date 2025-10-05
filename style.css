@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
 .search {
@@ -53,7 +54,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
 .search-btn:hover {
@@ -85,3 +86,76 @@ body {
   transform: scale(1.1);
   /* Optional: font-weight or shadow */
 }
+
+.prompt-container {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  flex: 1;
+  margin-bottom: 100px;
+}
+
+.message-wrapper {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+  /* justify-content: start; */
+}
+
+.message-wrapper.user {
+  justify-content: flex-end;     /* Aligns the message inside */
+  display: flex;
+  width: 100%;
+}
+
+.message-wrapper.response {
+  justify-content: flex-start;     /* Aligns the message inside */
+  display: flex;
+  width: 100%;
+}
+
+
+.prompt-message {
+  display: inline-block;
+  background: #f1f1f1;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  max-width: 60%;
+  /* text-align: left; */
+  word-wrap: break-word;
+  width: auto;
+  line-height: 2;
+}
+
+.prompt-response {
+  background: rgba(185, 240, 185, 0.863);
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  max-width: 60%;
+  word-wrap: break-word;
+  width: auto;
+  line-height: 2;
+}
+
+.shift-up{
+    bottom: 60px ;
+}
+
+.intro-section{
+    text-align: center;
+}
+
+
+/* Hide elements dynamically */
+.hidden {
+  display: none;
+}
+
