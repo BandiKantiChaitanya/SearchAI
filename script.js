@@ -53,26 +53,49 @@ function handleSubmit(value) {
   searchInput.value = '';
 
   
-  fetch('https://fakestoreapi.com/products?limit=10')
-  .then(res=>res.json())
-  .then(products=>{
-    const resWrapper=document.createElement('div')
-    const response=document.createElement('div')
+  // fetch('https://fakestoreapi.com/products?limit=10')
+  // .then(res=>res.json())
+  // .then(products=>{
+  //   const resWrapper=document.createElement('div')
+  //   const response=document.createElement('div')
     
-    response.className='prompt-response'
-    response.innerHTML+=`<p>The responses of the products are</p>`
-    products.forEach(product => (
-      response.innerHTML+=`
-    <p>${product.title}</p>
-    `
-    ));
+  //   response.className='prompt-response'
+  //   response.innerHTML+=`<p>The responses of the products are</p>`
+  //   products.forEach(product => (
+  //     response.innerHTML+=`
+  //   <p>${product.title}</p>
+  //   `
+  //   ));
 
-      resWrapper.className='message-wrapper response'
-      resWrapper.appendChild(response)
-      promptContainer.appendChild(resWrapper)
-  }
-  )
-  .catch(err=>console.log('Error Occured',err))
+  //     resWrapper.className='message-wrapper response'
+  //     resWrapper.appendChild(response)
+  //     promptContainer.appendChild(resWrapper)
+  // }
+  // )
+  // .catch(err=>console.log('Error Occured',err))
+
+// console.log('Hi')
+  fetch('http://localhost:3000/chat', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ message: input }),
+})
+.then(res => res.json())
+.then(data => {
+  const resWrapper = document.createElement('div');
+  const response = document.createElement('div');
+
+  response.className = 'prompt-response';
+  response.textContent = data.reply;
+  // console.log(data)
+  resWrapper.className = 'message-wrapper response';
+  resWrapper.appendChild(response);
+  promptContainer.appendChild(resWrapper);
+  promptContainer.scrollTop = promptContainer.scrollHeight;
+})
+.catch(err => console.log('Error:', err));
 
   
 
