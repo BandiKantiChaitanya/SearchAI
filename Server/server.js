@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import axios from 'axios';
 import sqllite from 'sqlite3'
-import freelancers from './data.js';
 import { open } from 'sqlite';
 import { createInterface } from 'readline';
 import { spawn } from 'child_process';
