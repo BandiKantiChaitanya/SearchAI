@@ -19,6 +19,7 @@ topics.forEach(topic => {
 promptContainer.classList.add('hidden');
 
 
+let conversationHistory = [];
 
 // Add prompt on submit
 function handleSubmit(value) {
@@ -75,26 +76,119 @@ function handleSubmit(value) {
   // .catch(err=>console.log('Error Occured',err))
 
 // console.log('Hi')
+conversationHistory.push({ role: 'user', content: input });
+
+if (conversationHistory.length > 6) {
+  conversationHistory = conversationHistory.slice(-6); // keep last 6
+}
+
+
   fetch('http://localhost:3000/chat', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify({ message: input }),
+  body: JSON.stringify({message: input, history :conversationHistory }),
 })
 .then(res => res.json())
 .then(data => {
-  const resWrapper = document.createElement('div');
-  const response = document.createElement('div');
+  conversationHistory.push({ role: 'assistant', content: data.reply });
 
-  response.className = 'prompt-response';
-  response.textContent = data.reply;
-  // console.log(data)
+  const fullText = data.reply;
+
+  // Extract product blocks and intro/outro text
+  const productBlocks = fullText.match(/Product:[\s\S]*?(?=(?:Product:|$))/g) || [];
+  const introText = fullText.split("Product:")[0].trim();
+
+  // Try to get outro text from the last block (similar to before)
+  let outroText = null;
+  if (productBlocks.length) {
+    const lastBlock = productBlocks[productBlocks.length - 1];
+    const detailsMatch = lastBlock.match(/Details:[\s\S]*/);
+    if (detailsMatch) {
+      const detailsText = detailsMatch[0].replace('Details:', '').trim();
+      const outroMatch = detailsText.match(/(.+?)(\s+Would you like.*)/i);
+      if (outroMatch) {
+        outroText = outroMatch[2].trim();
+        // Remove outro part from the last block to avoid duplication
+        productBlocks[productBlocks.length - 1] = lastBlock.replace(outroText, '').trim();
+      }
+    }
+  }
+
+  const resWrapper = document.createElement('div');
   resWrapper.className = 'message-wrapper response';
+
+  const response = document.createElement('div');
+  response.className = 'prompt-response';
+
+  // 1. Render intro text normally (outside adaptive cards)
+  if (introText) {
+    const introPara = document.createElement('p');
+    introPara.textContent = introText;
+    response.appendChild(introPara);
+  }
+
+  // 2. For each product block, create an Adaptive Card and append
+  productBlocks.forEach(block => {
+    const lines = block.split(/Description:|Details:/);
+    if (lines.length < 3) return;
+
+    const name = lines[0].replace("Product:", "").trim();
+    const description = lines[1].trim();
+    const details = lines[2].trim();
+
+    // Build Adaptive Card payload
+    const cardPayload = {
+      type: "AdaptiveCard",
+      version: "1.4",
+      body: [
+        {
+          type: "TextBlock",
+          text: name,
+          weight: "Bolder",
+          size: "Medium",
+          color: "#007b5e",
+          wrap: true,
+          spacing: "Medium",
+        },
+        {
+          type: "TextBlock",
+          text: description,
+          wrap: true,
+          weight: "Bolder",
+          spacing: "Small",
+          color: "Default",
+        },
+        {
+          type: "TextBlock",
+          text: details,
+          wrap: true,
+          spacing: "Small",
+          color: "Default",
+        },
+      ],
+    };
+
+    const adaptiveCard = new AdaptiveCards.AdaptiveCard();
+    adaptiveCard.parse(cardPayload);
+    const renderedCard = adaptiveCard.render();
+
+    response.appendChild(renderedCard);
+  });
+
+  // 3. Render outro text normally (outside adaptive cards)
+  if (outroText) {
+    const outroPara = document.createElement('p');
+    outroPara.textContent = outroText;
+    response.appendChild(outroPara);
+  }
+
   resWrapper.appendChild(response);
   promptContainer.appendChild(resWrapper);
   promptContainer.scrollTop = promptContainer.scrollHeight;
 })
+
 .catch(err => console.log('Error:', err));
 
   

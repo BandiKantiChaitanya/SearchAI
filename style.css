@@ -154,8 +154,49 @@ body {
 }
 
 
+.prompt-response > p {
+  text-align: left;
+  font-weight: normal;
+  margin: 12px 0;
+  color: #333;
+}
+
+
+.expert-card {
+  background: #fff;
+  /* border-left: 4px solid #007bff; */
+  border-radius: 10px;
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.expert-card h3 {
+  margin: 0 0 8px;
+  color:#007b5e;
+}
+
+
+.expert-card p strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+
+.expert-card p {
+  margin: 0;
+  color: #444;
+  line-height: 2;
+}
+
+
+
+
 /* Hide elements dynamically */
 .hidden {
   display: none;
 }
+
 
