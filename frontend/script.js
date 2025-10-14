@@ -83,7 +83,7 @@ if (conversationHistory.length > 6) {
 }
 // http://localhost:3000/chat
 
-  fetch('http://127.0.0.1:8000/search', {
+  fetch('https://searchai-do1g.onrender.com/search', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
