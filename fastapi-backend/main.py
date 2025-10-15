@@ -1,3 +1,5 @@
+import pyodbc
+print("Available ODBC Drivers:", pyodbc.drivers())
 import os
 import json
 from urllib.parse import quote_plus
