@@ -83,7 +83,7 @@ if (conversationHistory.length > 6) {
 }
 // http://localhost:3000/chat
 
-  fetch('https://searchai-do1g.onrender.com/search', {
+  fetch('https://searchai-rqmg.onrender.com/search', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
