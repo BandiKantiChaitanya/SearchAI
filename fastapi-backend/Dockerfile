@@ -1,6 +1,7 @@
-FROM python:3.10-slim
+# Use Debian 11 (bullseye) base image for compatibility with Microsoft's ODBC Driver
+FROM python:3.10-slim-bullseye
 
-# Install system dependencies including Microsoft ODBC Driver 17 for SQL Server
+# Install system dependencies and Microsoft ODBC Driver 17 for SQL Server
 RUN apt-get update && \
     apt-get install -y curl gnupg apt-transport-https && \
     curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
@@ -10,19 +11,21 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Set working directory
 WORKDIR /app
 
-# Copy your Python dependencies file
+# Copy Python dependency file
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Install Python packages
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy all your backend source code
+# Copy application code
 COPY . .
 
-# Expose port for FastAPI
+# Expose FastAPI port
 EXPOSE 8000
 
-# Start the app using uvicorn
+# Run FastAPI app with uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
